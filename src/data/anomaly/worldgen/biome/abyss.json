@@ -1,0 +1,23 @@
+{
+    "temperature": 0.8,
+    "downfall": 0.4,
+    "has_precipitation": false,
+    "effects": {
+        "sky_color": 2890851,
+        "fog_color": 5851242,
+        "water_color": 4180964,
+        "water_fog_color": 329011,
+        "grass_color": 11601377,
+        "foliage_color": 2401980,
+        "particle": {
+            "options": {
+                "type": "minecraft:ash"
+            },
+            "probability": 0.1
+        }
+    },
+    "spawners": {},
+    "spawn_costs": {},
+    "carvers": {},
+    "features": []
+}
