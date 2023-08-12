@@ -1,4 +1,4 @@
-name: DataPackJam10
+name: Anomaly
 author: PuckiSilver
 version: v1.0.0
 output: build
@@ -9,12 +9,12 @@ data_pack:
   load:
     - libs/*
     - src
-  name: DataPackJam10
-  description: A data pack by PuckiSilver made for data pack jam 10
+  name: Anomaly
+  description: A data pack by PuckiSilver made for Data Pack Jam 10
 
 pipeline:
   - mecha
   - plugins.remove_empty_functions
   - plugins.credit
 meta:
-  credit: [ps-dpjten]
+  credit: [anomaly]
