@@ -1,0 +1,20 @@
+name: DataPackJam10
+author: PuckiSilver
+version: v1.0.0
+output: build
+require:
+  - bolt
+
+data_pack:
+  load:
+    - libs/*
+    - src
+  name: DataPackJam10
+  description: A data pack by PuckiSilver made for data pack jam 10
+
+pipeline:
+  - mecha
+  - plugins.remove_empty_functions
+  - plugins.credit
+meta:
+  credit: [ps-dpjten]
