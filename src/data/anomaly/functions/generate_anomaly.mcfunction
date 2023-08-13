@@ -11,6 +11,7 @@ function ~/id:
     say @a[distance=..4,scores={anomaly.travel=100..}] should habe the score
     as @a[distance=..4,scores={anomaly.travel=100..}] function ~/../teleport with storage ps:anomaly generate
     tag @s add anomaly.await_loaded
+    function ~/../register_uuid
     scoreboard players reset @s anomaly.remove
 
 function ~/await_loaded:
@@ -31,3 +32,19 @@ function ~/await_loaded:
 function ~/teleport:
     $execute in anomaly:abyss run tp $(offset) 101 0
     effect give @s slow_falling 20 0 true
+
+function ~/register_uuid:
+    data modify storage ps:anomaly anomalies append value {}
+    function gu:generate
+    data modify storage ps:anomaly anomalies[-1].uuid set from storage gu:main out
+
+function ~/remove:
+    # TODO: Implement this function
+    # it should
+    # remove self from anomalies array
+    # set remove score of stale ones to 0 (will get removed once loaded)
+    # remove stale ones from array
+    # - stale is, if noone is in there and it is unloaded
+    # reset .gobal id if array is empty
+    # remove itself from existance
+    kill @s
