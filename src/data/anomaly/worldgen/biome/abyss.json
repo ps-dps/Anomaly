@@ -11,9 +11,9 @@
         "foliage_color": 2401980,
         "particle": {
             "options": {
-                "type": "minecraft:ash"
+                "type": "minecraft:portal"
             },
-            "probability": 0.1
+            "probability": 0.01
         }
     },
     "spawners": {},

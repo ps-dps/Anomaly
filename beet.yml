@@ -10,7 +10,13 @@ data_pack:
     - libs/*
     - src
   name: Anomaly
-  description: A data pack by PuckiSilver made for Data Pack Jam 10
+  description: Killing the Ender Dragon infects the whole world, can you stop the infection?
+
+resource_pack:
+  load:
+    - src
+  name: Anomaly-RP
+  description: Killing the Ender Dragon infects the whole world, can you stop the infection?
 
 pipeline:
   - mecha

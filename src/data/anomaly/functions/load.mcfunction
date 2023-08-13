@@ -5,6 +5,10 @@ append function_tag load:load {"values":["anomaly:load"]}
 
 scoreboard objectives add anomaly dummy
 scoreboard objectives add anomaly.const dummy
+scoreboard objectives add anomaly.remove dummy
+scoreboard objectives add anomaly.travel dummy
+scoreboard objectives add anomaly.id dummy
+scoreboard objectives add anomaly.timeout dummy
 
 scoreboard objectives add anomaly.raycast dummy
 
@@ -19,7 +23,37 @@ execute function ./tick:
     schedule function ./tick 1
 
     #> TICKING FUNCTION
-    as @a function ./player/actionbar:
-        # function ./edb/load with entity @s
-        # title @s actionbar {"nbt":"entity.hud","storage":"ps:edb"}
-        as @a[scores={anomaly.ability=1..}] function ./wfoas
+    store result score .gametime anomaly time query gametime
+
+    as @e[type=item_display,tag=anomaly.anomaly] at @s function ./tick_as_anomaly:
+        
+        particle portal ~ ~ ~ 0 0 0 3 1
+
+        scoreboard players add @a[distance=..4] anomaly.travel 1
+        effect give @a[distance=..4,scores={anomaly.travel=1}] nausea 8 0 true
+        unless score @s anomaly.id = @s anomaly.id if entity @a[distance=..4,scores={anomaly.travel=100..}] function ./generate_anomaly/id
+        if     score @s anomaly.id = @s anomaly.id if entity @a[distance=..4,scores={anomaly.travel=100..}] function ./generate_anomaly/just_tp
+        as @s[tag=anomaly.await_loaded] function ./generate_anomaly/await_loaded
+
+        if entity @s[tag=anomaly.active] function ./tick_as_active_anomaly:
+            scoreboard players operation #id anomaly = @s anomaly.id
+            unless entity @a[predicate=./match_id] scoreboard players add @s anomaly.timeout 1
+            if score @s anomaly.timeout matches 3600.. kill @s
+
+        if score @s anomaly.remove <= .gametime anomaly kill @s
+
+    as @a at @s function ./tick_as_player:
+        if score @s anomaly.ability matches 1.. function ./wfoas
+        if score @s anomaly.travel matches 1.. unless entity @e[type=item_display,tag=anomaly.anomaly,distance=..4,limit=1] scoreboard players reset @s anomaly.travel
+        if score @s anomaly.id matches 1.. unless dimension anomaly:abyss scoreboard players reset @s anomaly.id
+
+predicate ./match_id { "condition": "minecraft:entity_scores", "entity": "this", "scores": {
+    "anomaly.id": {
+        "min": { "type": "minecraft:score", "target": { "type": "minecraft:fixed",
+            "name": "#id" },
+            "score": "anomaly"},
+        "max": { "type": "minecraft:score", "target": { "type": "minecraft:fixed",
+            "name": "#id" },
+            "score": "anomaly" }}
+    }}
+
