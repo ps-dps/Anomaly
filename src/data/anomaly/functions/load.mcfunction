@@ -35,7 +35,7 @@ execute function ./tick:
 
         if entity @s[tag=anomaly.active] function ./tick_as_active_anomaly:
             scoreboard players operation #id anomaly = @s anomaly.id
-            unless entity @a[predicate=./match_id] scoreboard players add @s anomaly.timeout 1
+            unless entity @a[predicate=./match_id,limit=1] scoreboard players add @s anomaly.timeout 1
             if score @s anomaly.timeout matches 3600.. kill @s
 
         if score @s anomaly.remove <= .gametime anomaly kill @s

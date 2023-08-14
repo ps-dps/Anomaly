@@ -39,12 +39,18 @@ function ~/register_uuid:
     data modify storage ps:anomaly anomalies[-1].uuid set from storage gu:main out
 
 function ~/remove:
-    # TODO: Implement this function
-    # it should
-    # remove self from anomalies array
-    # set remove score of stale ones to 0 (will get removed once loaded)
-    # remove stale ones from array
-    # - stale is, if noone is in there and it is unloaded
-    # reset .gobal id if array is empty
-    # remove itself from existance
+    function gu:generate
+    execute function ~/uuid with storage gu:main {}:
+        $data remove storage ps:anomaly anomalies[{uuid:"$(out)"}]
+
+    data modify storage ps:temp anomalies set from storage ps:anomaly anomalies
+    if data storage ps:temp anomalies[0] function ~/recursive with storage ps:temp anomalies[-1]:
+        $scoreboard players operation #id anomaly = $(uuid) anomaly.id
+        $execute unless entity $(uuid) unless entity @a[predicate=anomaly:match_id,limit=1] run scoreboard players set $(uuid) anomaly.remove -1
+        $execute if score $(uuid) anomaly.remove matches -1 run data remove storage ps:anomaly anomalies[{uuid:"$(uuid)"}]
+        data remove storage ps:temp anomalies[-1]
+        if data storage ps:temp anomalies[0] function ~/ with storage ps:temp anomalies[-1]
+
+    unless data storage ps:anomaly anomalies[0] scoreboard players reset .global anomaly.id
+
     kill @s
