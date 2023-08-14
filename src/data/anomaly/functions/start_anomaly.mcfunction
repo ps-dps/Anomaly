@@ -9,3 +9,7 @@ advancement ~/ { "criteria": {
     }
 
 tellraw @s ["",{"text":"The Infection spreads..."}]
+
+function ./utils/rand_range with storage ps:anomaly spawn_range
+scoreboard players operation @s anomaly.spawn = .gametime anomaly
+scoreboard players operation @s anomaly.spawn += .random anomaly

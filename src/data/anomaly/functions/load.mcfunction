@@ -9,12 +9,13 @@ scoreboard objectives add anomaly.remove dummy
 scoreboard objectives add anomaly.travel dummy
 scoreboard objectives add anomaly.id dummy
 scoreboard objectives add anomaly.timeout dummy
+scoreboard objectives add anomaly.spawn dummy
 
 scoreboard objectives add anomaly.raycast dummy
 
 scoreboard objectives add anomaly.ability minecraft.used:minecraft.warped_fungus_on_a_stick
 
-data merge storage ps:anomaly {anomalies:[]}
+data merge storage ps:anomaly {anomalies:[],spawn_range:{min:3600,max:24000}}
 
 
 execute function ./tick:
@@ -24,7 +25,6 @@ execute function ./tick:
     store result score .gametime anomaly time query gametime
 
     as @e[type=item_display,tag=anomaly.anomaly] at @s function ./tick_as_anomaly:
-        
         particle portal ~ ~ ~ 0 0 0 3 1
 
         scoreboard players add @a[distance=..4] anomaly.travel 1
@@ -44,6 +44,13 @@ execute function ./tick:
         if score @s anomaly.ability matches 1.. function ./wfoas
         if score @s anomaly.travel matches 1.. unless entity @e[type=item_display,tag=anomaly.anomaly,distance=..4,limit=1] scoreboard players reset @s anomaly.travel
         if score @s anomaly.id matches 1.. unless dimension anomaly:abyss scoreboard players reset @s anomaly.id
+        if score @s anomaly.spawn <= .gametime anomaly function ~/spawn_anomaly:
+            function ./anomaly/place_random
+            function ./utils/rand_range with storage ps:anomaly spawn_range
+            scoreboard players operation #spawn anomaly.spawn = .gametime anomaly
+            scoreboard players operation #spawn anomaly.spawn += .random anomaly
+            as @a[distance=..100] if score @s anomaly.spawn < #spawn anomaly.spawn
+                scoreboard players operation @s anomaly.spawn = #spawn anomaly.spawn
 
 predicate ./match_id { "condition": "minecraft:entity_scores", "entity": "this", "scores": {
     "anomaly.id": {
