@@ -11,12 +11,19 @@ scoreboard objectives add anomaly.id dummy
 scoreboard objectives add anomaly.timeout dummy
 scoreboard objectives add anomaly.spawn dummy
 
+scoreboard objectives add anomaly.boss.health dummy
+scoreboard objectives add anomaly.boss.max_health dummy
+scoreboard objectives add anomaly.bossvar.0 dummy
+
 scoreboard objectives add anomaly.raycast dummy
 
 scoreboard objectives add anomaly.ability minecraft.used:minecraft.warped_fungus_on_a_stick
 
+scoreboard players set #100 anomaly 100
+
 data modify storage ps:anomaly spawn_range set value {min:3600,max:24000}
 unless data storage ps:anomaly anomalies data modify storage ps:anomaly anomalies set value []
+
 
 
 execute function ./tick:
@@ -52,6 +59,8 @@ execute function ./tick:
             scoreboard players operation #spawn anomaly.spawn += .random anomaly
             as @a[distance=..100] if score @s anomaly.spawn < #spawn anomaly.spawn
                 scoreboard players operation @s anomaly.spawn = #spawn anomaly.spawn
+
+    as @e[type=item_display,limit=1,tag=anomaly.root_nexus] function ./boss/root_nexus/tick
 
 predicate ./match_id { "condition": "minecraft:entity_scores", "entity": "this", "scores": {
     "anomaly.id": {

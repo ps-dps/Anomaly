@@ -26,7 +26,7 @@ function ~/await_loaded:
     in anomaly:abyss function ~/../generate_dungeon with storage ps:anomaly generate:
         $execute positioned $(offset) 101 0 run function anomaly:dungeon/remove
         $execute positioned $(offset) 101 0 run function anomaly:dungeon/$(dungeon)
-        $execute positioned $(offset) 101 0 as @a[distance=..101] run say dfesfhgh
+        $execute positioned $(offset) 101 0 run bossbar set anomaly:boss/$(offset) players @a[distance=..101] 
         $execute positioned $(offset) 101 0 as @a[distance=..101] run tp $(offset) 101 0
 
 function ~/teleport:
