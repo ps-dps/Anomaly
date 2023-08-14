@@ -26,6 +26,6 @@ function ~/tick:
     if     score @s anomaly.id = @s anomaly.id if entity @a[distance=..4,scores={anomaly.travel=100..}] function ./generate_anomaly/just_tp
     as @s[tag=anomaly.await_loaded] function ./generate_anomaly/await_loaded
 
-    if score @s anomaly.remove <= .gametime anomaly kill @s
+    if score @s anomaly.remove <= .gametime anomaly function ./generate_anomaly/remove
 
 predicate ~/50percent { "condition": "minecraft:random_chance", "chance": 0.5 }

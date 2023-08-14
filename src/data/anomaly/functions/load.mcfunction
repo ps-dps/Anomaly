@@ -15,7 +15,8 @@ scoreboard objectives add anomaly.raycast dummy
 
 scoreboard objectives add anomaly.ability minecraft.used:minecraft.warped_fungus_on_a_stick
 
-data merge storage ps:anomaly {anomalies:[],spawn_range:{min:3600,max:24000}}
+data modify storage ps:anomaly spawn_range set value {min:3600,max:24000}
+unless data storage ps:anomaly anomalies data modify storage ps:anomaly anomalies set value []
 
 
 execute function ./tick:
@@ -36,16 +37,16 @@ execute function ./tick:
         if entity @s[tag=anomaly.active] function ./tick_as_active_anomaly:
             scoreboard players operation #id anomaly = @s anomaly.id
             unless entity @a[predicate=./match_id,limit=1] scoreboard players add @s anomaly.timeout 1
-            if score @s anomaly.timeout matches 3600.. kill @s
+            if score @s anomaly.timeout matches 3600.. function ./generate_anomaly/remove
 
-        if score @s anomaly.remove <= .gametime anomaly kill @s
+        if score @s anomaly.remove <= .gametime anomaly function ./generate_anomaly/remove
 
     as @a at @s function ./tick_as_player:
         if score @s anomaly.ability matches 1.. function ./wfoas
         if score @s anomaly.travel matches 1.. unless entity @e[type=item_display,tag=anomaly.anomaly,distance=..4,limit=1] scoreboard players reset @s anomaly.travel
         if score @s anomaly.id matches 1.. unless dimension anomaly:abyss scoreboard players reset @s anomaly.id
         if score @s anomaly.spawn <= .gametime anomaly function ~/spawn_anomaly:
-            function ./anomaly/place_random
+            if dimension minecraft:overworld function ./anomaly/place_random
             function ./utils/rand_range with storage ps:anomaly spawn_range
             scoreboard players operation #spawn anomaly.spawn = .gametime anomaly
             scoreboard players operation #spawn anomaly.spawn += .random anomaly
