@@ -8,7 +8,6 @@ function ~/id:
     scoreboard players add .global anomaly.id 10000
     store result storage ps:anomaly generate.offset int 1 scoreboard players operation @s anomaly.id = .global anomaly.id
     scoreboard players operation @a[distance=..4,scores={anomaly.travel=100..}] anomaly.id = @s anomaly.id
-    say @a[distance=..4,scores={anomaly.travel=100..}] should habe the score
     as @a[distance=..4,scores={anomaly.travel=100..}] function ~/../teleport with storage ps:anomaly generate
     tag @s add anomaly.await_loaded
     function ~/../register_uuid
@@ -26,7 +25,7 @@ function ~/await_loaded:
     in anomaly:abyss function ~/../generate_dungeon with storage ps:anomaly generate:
         $execute positioned $(offset) 101 0 run function anomaly:dungeon/remove
         $execute positioned $(offset) 101 0 run function anomaly:dungeon/$(dungeon)
-        $execute positioned $(offset) 101 0 run bossbar set anomaly:boss/$(offset) players @a[distance=..101] 
+        $execute positioned $(offset) 101 0 run bossbar set anomaly:boss/$(offset) players @a[distance=..101]
         $execute positioned $(offset) 101 0 as @a[distance=..101] run tp $(offset) 101 0
 
 function ~/teleport:
