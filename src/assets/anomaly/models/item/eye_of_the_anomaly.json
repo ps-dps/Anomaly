@@ -1,6 +1,0 @@
-{
-	"parent": "minecraft:item/generated",
-	"textures": {
-	  "layer0": "anomaly:item/eye_of_the_anomaly"
-	}
-  }
