@@ -13,6 +13,7 @@ scoreboard objectives add anomaly.spawn dummy
 
 scoreboard objectives add anomaly.boss.health dummy
 scoreboard objectives add anomaly.boss.max_health dummy
+scoreboard objectives add anomaly.boss.time dummy
 scoreboard objectives add anomaly.bossvar.0 dummy
 
 scoreboard objectives add anomaly.raycast dummy
@@ -60,7 +61,27 @@ execute function ./tick:
             as @a[distance=..100] if score @s anomaly.spawn < #spawn anomaly.spawn
                 scoreboard players operation @s anomaly.spawn = #spawn anomaly.spawn
 
-    as @e[type=item_display,limit=1,tag=anomaly.root_nexus] function ./boss/root_nexus/tick
+    as @e[type=marker,limit=1,tag=anomaly.bossarena] at @s function ./tick_boss_arena:
+        store result storage ps:temp temp.id int 1 scoreboard players get @s anomaly.id
+
+        unless entity @a[dx=47,dy=47,dz=47,limit=1] if entity @s[tag=anomaly.active] function ~/deactivate with storage ps:temp temp:
+            tag @s remove anomaly.active
+            $bossbar set anomaly:boss/$(id) visible false
+            $execute store result storage ps:temp temp.boss int 1 run scoreboard players get .$(id) anomaly.id
+            execute function ~/../deactivate_call with storage ps:temp temp:
+                $function anomaly:boss/$(boss)/deactivate
+
+        if entity @a[dx=47,dy=47,dz=47,limit=1] unless entity @s[tag=anomaly.active] function ~/activate with storage ps:temp temp:
+            tag @s add anomaly.active
+            $bossbar set anomaly:boss/$(id) visible true
+            $execute store result storage ps:temp temp.boss int 1 run scoreboard players get .$(id) anomaly.id
+            execute function ~/../activate_call with storage ps:temp temp:
+                $function anomaly:boss/$(boss)/activate
+        
+        execute function ./tick_boss_arena2 with storage ps:temp temp:
+            $execute store result storage ps:temp temp.boss int 1 run scoreboard players get .$(id) anomaly.id
+            execute function ./tick_boss_arena3 with storage ps:temp temp:
+                $function anomaly:boss/$(boss)/tick
 
 predicate ./match_id { "condition": "minecraft:entity_scores", "entity": "this", "scores": {
     "anomaly.id": {
