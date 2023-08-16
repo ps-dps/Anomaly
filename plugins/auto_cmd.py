@@ -8,7 +8,7 @@ def beet_default(ctx: Context):
     ctx.require('beet.contrib.model_merging')
 
     vanilla = ctx.inject(Vanilla)
-    vanilla.mount('assets/minecraft/models/item')
+    # vanilla.mount('assets/minecraft/models/item')
 
     new_textures = {}
 
@@ -21,9 +21,9 @@ def beet_default(ctx: Context):
 
         model = ctx.assets.models.get(vanilla_model_path)
 
-        if not model:
-            if not vanilla_model_path in vanilla.assets.models: continue
-            model = ctx.assets.models[vanilla_model_path] = vanilla.assets.models[vanilla_model_path].copy()
+        # if not model:
+        #     if not vanilla_model_path in vanilla.assets.models: continue
+        #     model = ctx.assets.models[vanilla_model_path] = vanilla.assets.models[vanilla_model_path].copy()
 
         if not ctx.assets.models.get(name):
             ctx.assets.models[name] = Model({
