@@ -14,13 +14,17 @@ scoreboard objectives add anomaly.spawn dummy
 scoreboard objectives add anomaly.boss.health dummy
 scoreboard objectives add anomaly.boss.max_health dummy
 scoreboard objectives add anomaly.boss.time dummy
+scoreboard objectives add anomaly.boss.phase dummy
 scoreboard objectives add anomaly.bossvar.0 dummy
+
+scoreboard objectives add anomaly.mob dummy
 
 scoreboard objectives add anomaly.raycast dummy
 
 scoreboard objectives add anomaly.ability minecraft.used:minecraft.warped_fungus_on_a_stick
 
 scoreboard players set #100 anomaly 100
+scoreboard players set #20 anomaly 20
 
 data modify storage ps:anomaly spawn_range set value {min:3600,max:24000}
 unless data storage ps:anomaly anomalies data modify storage ps:anomaly anomalies set value []
@@ -61,7 +65,7 @@ execute function ./tick:
             as @a[distance=..100] if score @s anomaly.spawn < #spawn anomaly.spawn
                 scoreboard players operation @s anomaly.spawn = #spawn anomaly.spawn
 
-    as @e[type=marker,limit=1,tag=anomaly.bossarena] at @s function ./tick_boss_arena:
+    as @e[type=marker,tag=anomaly.bossarena] at @s function ./tick_boss_arena:
         store result storage ps:temp id.id int 1 scoreboard players get @s anomaly.id
 
         unless entity @a[dx=47,dy=47,dz=47,limit=1] if entity @s[tag=anomaly.active] function ~/deactivate with storage ps:temp id:
@@ -82,6 +86,8 @@ execute function ./tick:
             $execute store result storage ps:temp id.boss int 1 run scoreboard players get .$(id) anomaly.id
             execute function ./tick_boss_arena3 with storage ps:temp id:
                 $function anomaly:boss/$(boss)/tick
+    
+    as @e[tag=anomaly.mob.tick] function ./mob/main/tick
 
 predicate ./match_id { "condition": "minecraft:entity_scores", "entity": "this", "scores": {
     "anomaly.id": {
