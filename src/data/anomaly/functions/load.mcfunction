@@ -62,25 +62,25 @@ execute function ./tick:
                 scoreboard players operation @s anomaly.spawn = #spawn anomaly.spawn
 
     as @e[type=marker,limit=1,tag=anomaly.bossarena] at @s function ./tick_boss_arena:
-        store result storage ps:temp temp.id int 1 scoreboard players get @s anomaly.id
+        store result storage ps:temp id.id int 1 scoreboard players get @s anomaly.id
 
-        unless entity @a[dx=47,dy=47,dz=47,limit=1] if entity @s[tag=anomaly.active] function ~/deactivate with storage ps:temp temp:
+        unless entity @a[dx=47,dy=47,dz=47,limit=1] if entity @s[tag=anomaly.active] function ~/deactivate with storage ps:temp id:
             tag @s remove anomaly.active
             $bossbar set anomaly:boss/$(id) visible false
-            $execute store result storage ps:temp temp.boss int 1 run scoreboard players get .$(id) anomaly.id
-            execute function ~/../deactivate_call with storage ps:temp temp:
+            $execute store result storage ps:temp id.boss int 1 run scoreboard players get .$(id) anomaly.id
+            execute function ~/../deactivate_call with storage ps:temp id:
                 $function anomaly:boss/$(boss)/deactivate
 
-        if entity @a[dx=47,dy=47,dz=47,limit=1] unless entity @s[tag=anomaly.active] function ~/activate with storage ps:temp temp:
+        if entity @a[dx=47,dy=47,dz=47,limit=1] unless entity @s[tag=anomaly.active] function ~/activate with storage ps:temp id:
             tag @s add anomaly.active
             $bossbar set anomaly:boss/$(id) visible true
-            $execute store result storage ps:temp temp.boss int 1 run scoreboard players get .$(id) anomaly.id
-            execute function ~/../activate_call with storage ps:temp temp:
+            $execute store result storage ps:temp id.boss int 1 run scoreboard players get .$(id) anomaly.id
+            execute function ~/../activate_call with storage ps:temp id:
                 $function anomaly:boss/$(boss)/activate
         
-        execute function ./tick_boss_arena2 with storage ps:temp temp:
-            $execute store result storage ps:temp temp.boss int 1 run scoreboard players get .$(id) anomaly.id
-            execute function ./tick_boss_arena3 with storage ps:temp temp:
+        execute function ./tick_boss_arena2 with storage ps:temp id:
+            $execute store result storage ps:temp id.boss int 1 run scoreboard players get .$(id) anomaly.id
+            execute function ./tick_boss_arena3 with storage ps:temp id:
                 $function anomaly:boss/$(boss)/tick
 
 predicate ./match_id { "condition": "minecraft:entity_scores", "entity": "this", "scores": {
