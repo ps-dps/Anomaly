@@ -1,7 +1,9 @@
 
 function ~/just_tp:
     store result storage ps:anomaly generate.offset int 1 scoreboard players get @s anomaly.id
-    scoreboard players operation @a[distance=..4,scores={anomaly.travel=100..}] anomaly.id = @s anomaly.id
+    store result score #id anomaly scoreboard players operation @a[distance=..4,scores={anomaly.travel=100..}] anomaly.id = @s anomaly.id
+    execute function ~/../set_bossbar with storage ps:anomaly generate:
+        $bossbar set anomaly:boss/$(offset) players @a[predicate=anomaly:match_id]
     execute as @a[distance=..4,scores={anomaly.travel=100..}] function ~/../teleport with storage ps:anomaly generate
 
 function ~/id:

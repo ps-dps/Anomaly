@@ -34,6 +34,7 @@ function ~/spawn:
 function ~/tick:
     scoreboard players operation #id anomaly = @s anomaly.id
     as @e[type=item_display,tag=anomaly.radience,predicate=./../match_id,limit=1] function ~/../tick_as_item_display
+    as @e[type=marker,tag=anomaly.radience.beam,predicate=./../match_id] if score @s anomaly.boss.time <= .gametime anomaly function ~/../attack/beam3
 
 function ~/tick_as_item_display:
     # if score @s anomaly.boss.time matches 100.. scoreboard players reset @s anomaly.boss.time
@@ -106,6 +107,22 @@ function ~/attack/farrow:
         data modify entity @s Motion set value [0d,-2d,0d]
         tag @s add anomaly.boss.minion
         scoreboard players operation @s anomaly.id = #id anomaly
+
+
+function ~/attack/beam:
+    scoreboard players operation #id anomaly = @s anomaly.id
+    at @a[predicate=./../match_id] summon marker function ~/../beam2:
+        tag @s add anomaly.boss.minion
+        tag @s add anomaly.radience.beam
+        scoreboard players operation @s anomaly.id = #id anomaly
+        scoreboard players operation @s anomaly.boss.time = .gametime anomaly
+        scoreboard players add @s anomaly.boss.time 20
+function ~/attack/beam3:
+    particle dust 0.8 0 0.8 1.2 ~ ~ ~ 0.5 100 0.5 0 100
+    particle portal ~ ~ ~ 0.5 100 0.5 2 100
+    scoreboard players operation #id anomaly = @s anomaly.id
+    positioned ~-0.5 ~-100 ~-0.5 as @a[dx=0,dy=199,dz=0] damage @s 5 generic by @e[type=giant,limit=1,tag=anomaly.boss,tag=anomaly.radience,predicate=./../match_id] #! ADD DAMAGE TYPE || CAN I USE FROM CAUSE FOR ATTACK DEATH MESSAGE
+    kill @s
 
 
 
