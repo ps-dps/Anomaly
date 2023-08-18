@@ -37,10 +37,10 @@ function ~/tick:
     as @e[type=item_display,tag=anomaly.root_nexus,predicate=./../match_id,limit=1] function ~/../tick_as_item_display
 
 function ~/tick_as_item_display:
-    if score @s anomaly.boss.time matches 100.. scoreboard players reset @s anomaly.boss.time
-    scoreboard players add @s anomaly.boss.time 1
-    if score @s anomaly.boss.time matches 1 data merge entity @s {start_interpolation:0,interpolation_duration:50,transformation:{scale:[6.4f,7.5f,6.4f],translation:[0f,3.75f,0f]}}
-    if score @s anomaly.boss.time matches 51 data merge entity @s {start_interpolation:0,interpolation_duration:50,transformation:{scale:[7f,7f,7f],translation:[0f,3.5f,0f]}}
+    if score @s anomaly.time matches 100.. scoreboard players reset @s anomaly.time
+    scoreboard players add @s anomaly.time 1
+    if score @s anomaly.time matches 1 data merge entity @s {start_interpolation:0,interpolation_duration:50,transformation:{scale:[6.4f,7.5f,6.4f],translation:[0f,3.75f,0f]}}
+    if score @s anomaly.time matches 51 data merge entity @s {start_interpolation:0,interpolation_duration:50,transformation:{scale:[7f,7f,7f],translation:[0f,3.5f,0f]}}
     
     scoreboard players set #temp anomaly 0
     on passengers scoreboard players set #temp anomaly 1

@@ -9,13 +9,18 @@ scoreboard objectives add anomaly.remove dummy
 scoreboard objectives add anomaly.travel dummy
 scoreboard objectives add anomaly.id dummy
 scoreboard objectives add anomaly.timeout dummy
+scoreboard objectives add anomaly.time dummy
 scoreboard objectives add anomaly.spawn dummy
 
 scoreboard objectives add anomaly.boss.health dummy
 scoreboard objectives add anomaly.boss.max_health dummy
-scoreboard objectives add anomaly.boss.time dummy
 scoreboard objectives add anomaly.boss.phase dummy
 scoreboard objectives add anomaly.bossvar.0 dummy
+
+scoreboard objectives add anomaly.passive.head dummy
+scoreboard objectives add anomaly.passive.chest dummy
+scoreboard objectives add anomaly.passive.legs dummy
+scoreboard objectives add anomaly.passive.feet dummy
 
 scoreboard objectives add anomaly.mob dummy
 

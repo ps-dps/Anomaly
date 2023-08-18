@@ -47,9 +47,9 @@ function ~/tick:
     scoreboard players operation #id anomaly = @s anomaly.id
     as @e[type=item_display,tag=anomaly.radience,tag=!anomaly.radience.acid,predicate=./../match_id,limit=1] function ~/../tick_as_item_display
     if entity @s[tag=anomaly.active] as @e[type=item_display,tag=anomaly.radience.acid,predicate=./../match_id,limit=1] at @s function ~/../tick_acid
-    as @e[type=marker,tag=anomaly.radience.beam,predicate=./../match_id] if score @s anomaly.boss.time <= .gametime anomaly at @s function ~/../attack/beam3
-    store result score #temp anomaly scoreboard players add @s anomaly.boss.time 1
-    if score @s anomaly.boss.time matches 0.. scoreboard players operation #temp anomaly /= #20 anomaly
+    as @e[type=marker,tag=anomaly.radience.beam,predicate=./../match_id] if score @s anomaly.time <= .gametime anomaly at @s function ~/../attack/beam3
+    store result score #temp anomaly scoreboard players add @s anomaly.time 1
+    if score @s anomaly.time matches 0.. scoreboard players operation #temp anomaly /= #20 anomaly
     if score #temp anomaly = @s anomaly.bossvar.0 function ~/../attack
 
 function ~/tick_as_item_display:
@@ -108,7 +108,7 @@ function ~/deactivate:
 
 function ~/attack:
     store result score @s anomaly.bossvar.0 random value 4..10
-    scoreboard players set @s anomaly.boss.time -120
+    scoreboard players set @s anomaly.time -120
     store result score #spawn anomaly if predicate ./../10percent
     if score #spawn anomaly matches 1 function ./../mob/1/spawn
     scoreboard players operation @e[tag=anomaly.setup] anomaly.id = @s anomaly.id
@@ -127,8 +127,8 @@ function ~/attack/beam:
         tag @s add anomaly.boss.minion
         tag @s add anomaly.radience.beam
         scoreboard players operation @s anomaly.id = #id anomaly
-        scoreboard players operation @s anomaly.boss.time = .gametime anomaly
-        scoreboard players add @s anomaly.boss.time 20
+        scoreboard players operation @s anomaly.time = .gametime anomaly
+        scoreboard players add @s anomaly.time 20
         particle portal ~ ~ ~ 0 25 0 2 1000
         particle end_rod ~ ~ ~ 0 25 0 0 500
         playsound minecraft:block.beacon.activate hostile @a ~ ~ ~ 1 2
