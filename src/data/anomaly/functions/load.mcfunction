@@ -59,9 +59,23 @@ execute function ./tick:
         if score @s anomaly.remove <= .gametime anomaly function ./generate_anomaly/remove
 
     as @a at @s function ./tick_as_player:
+        if entity @s[tag=anomaly.passive.tick.head] store result storage ps:temp passive.id int 1 scoreboard players get @s anomaly.passive.head
+        if entity @s[tag=anomaly.passive.tick.head] function ./tick_passive with storage ps:temp passive
+        if entity @s[tag=anomaly.passive.tick.chest] store result storage ps:temp passive.id int 1 scoreboard players get @s anomaly.passive.chest
+        if entity @s[tag=anomaly.passive.tick.chest] function ./tick_passive with storage ps:temp passive
+        if entity @s[tag=anomaly.passive.tick.legs] store result storage ps:temp passive.id int 1 scoreboard players get @s anomaly.passive.legs
+        if entity @s[tag=anomaly.passive.tick.legs] function ./tick_passive with storage ps:temp passive
+        if entity @s[tag=anomaly.passive.tick.feet] store result storage ps:temp passive.id int 1 scoreboard players get @s anomaly.passive.feet
+        if entity @s[tag=anomaly.passive.tick.feet] function ./tick_passive with storage ps:temp passive:
+            $function anomaly:passive/$(id)/tick
+
         if score @s anomaly.ability matches 1.. function ./wfoas
+
         if score @s anomaly.travel matches 1.. unless entity @e[type=item_display,tag=anomaly.anomaly,distance=..4,limit=1] scoreboard players reset @s anomaly.travel
+
+        if score @s anomaly.id matches 1.. unless dimension anomaly:abyss gamemode survival @s[gamemode=!creative,gamemode=!spectator]
         if score @s anomaly.id matches 1.. unless dimension anomaly:abyss scoreboard players reset @s anomaly.id
+
         if score @s anomaly.spawn <= .gametime anomaly function ~/spawn_anomaly:
             if dimension minecraft:overworld function ./anomaly/place_random
             function ./utils/rand_range with storage ps:anomaly spawn_range
@@ -80,7 +94,7 @@ execute function ./tick:
             execute function ~/../deactivate_call with storage ps:temp id:
                 $function anomaly:boss/$(boss)/deactivate
 
-        if entity @a[dx=47,dy=47,dz=47,limit=1] unless entity @s[tag=anomaly.active] function ~/activate with storage ps:temp id:
+        if entity @a[dx=47,dy=47,dz=47,limit=1] unless entity @s[tag=anomaly.active] unless entity @s[tag=anomaly.defeated] function ~/activate with storage ps:temp id:
             tag @s add anomaly.active
             $bossbar set anomaly:boss/$(id) visible true
             $execute store result storage ps:temp id.boss int 1 run scoreboard players get .$(id) anomaly.id

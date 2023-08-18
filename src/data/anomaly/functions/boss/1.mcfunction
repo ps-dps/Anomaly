@@ -1,13 +1,17 @@
 
 function ~/spawn:
+    tp @s ~ ~-5 ~
+    at @s function ~/../spawn2
+function ~/spawn2:
+    place template anomaly:boss/1
     store result storage ps:temp boss.id int 1 scoreboard players get @s anomaly.id
-    positioned ~ ~ ~ summon item_display function ~/model with storage ps:temp boss: #! ADJUST POSITION TO REFLECT CORRECT POSITION IN ARENA
+    positioned ~23 ~10 ~23 summon item_display function ~/model with storage ps:temp boss:
         tag @s add anomaly.boss
         tag @s add anomaly.root_nexus
         $scoreboard players set #id anomaly $(id)
         scoreboard players operation @s anomaly.id = #id anomaly
         $scoreboard players set .$(id) anomaly.id 1
-        item replace entity @s container.0 with stone
+        item replace entity @s container.0 with minecraft:warped_fungus_on_a_stick{CustomModelData:255904}
         summon slime ~ ~ ~ {
             Invulnerable: 1b,
             Size:12,
@@ -60,14 +64,31 @@ function ~/hit_match:
     store result storage ps:temp boss.id int 1 scoreboard players get @s anomaly.id
     execute function ~/../update_bossbar with storage ps:temp boss:
         $execute store result bossbar anomaly:boss/$(id) value run data get entity @s Health 10
-    if predicate ~/../40percent function ~/../summon_spread_minion
+    if predicate ~/../40percent at @s function ~/../summon_spread_minion
 
 function ~/summon_spread_minion:
     scoreboard players operation #id anomaly = @s anomaly.id
-    at @s summon zombie function ~/summon_spread_minion_setup:
+    store result score #mob anomaly random value 1..10
+    if score #mob anomaly matches 1 function ./../mob/1/spawn
+    if score #mob anomaly matches 2 function ./../mob/2/spawn
+    if score #mob anomaly matches 3 run summon enderman ~ ~ ~ {Tags:["anomaly.setup"]}
+    if score #mob anomaly matches 4 run summon endermite ~ ~ ~ {Tags:["anomaly.setup"]}
+    if score #mob anomaly matches 5..8 run summon zombie ~ ~ ~ {Tags:["anomaly.setup"], ArmorDropChances:[0f,0f,0f,0f], ArmorItems:[
+        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:15204572}}},
+        {id:"minecraft:leather_leggings",Count:1b,tag:{display:{color:15204572}}},
+        {id:"minecraft:leather_chestplate",Count:1b,tag:{display:{color:15204572}}},
+        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:15204572}}}]}
+    if score #mob anomaly matches 9..10 run summon skeleton ~ ~ ~ {Tags:["anomaly.setup"], HandItems:[{id:"minecraft:bow",Count:1b},{}], ArmorDropChances:[0f,0f,0f,0f], ArmorItems:[
+        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:15204572}}},
+        {id:"minecraft:leather_leggings",Count:1b,tag:{display:{color:15204572}}},
+        {id:"minecraft:leather_chestplate",Count:1b,tag:{display:{color:15204572}}},
+        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:15204572}}}]}
+
+    as @e[tag=anomaly.setup] function ~/../summon_spread_minion_setup:
         tag @s add anomaly.boss.minion
         scoreboard players operation @s anomaly.id = #id anomaly
         spreadplayers ~ ~ 4 20 false @s
+        tag @s remove anomaly.setup
 
 
 function ~/activate:

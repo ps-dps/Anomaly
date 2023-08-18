@@ -1,16 +1,24 @@
 
 function ~/just_tp:
-    store result storage ps:anomaly generate.offset int 1 scoreboard players get @s anomaly.id
-    store result score #id anomaly scoreboard players operation @a[distance=..4,scores={anomaly.travel=100..}] anomaly.id = @s anomaly.id
+    store result storage ps:anomaly generate.offset int 1 scoreboard players operation #id anomaly = @s anomaly.id
+    as @a[distance=..4,scores={anomaly.travel=100..}] function ~/../player_enter:
+        data remove storage ps:edb entity
+        function ./edb/load with entity @s
+        store result storage ps:edb entity.anomaly.return_x int 1 data get entity @s Pos[0]
+        store result storage ps:edb entity.anomaly.return_y int 1 data get entity @s Pos[1]
+        store result storage ps:edb entity.anomaly.return_z int 1 data get entity @s Pos[2]
+        data modify storage ps:edb entity.anomaly.return_dim set from entity @s Dimension
+        function ./edb/save with entity @s
+        gamemode adventure @s[gamemode=!creative,gamemode=!spectator]
+        store result score #id anomaly scoreboard players operation @s anomaly.id = #id anomaly
+        function ~/../teleport with storage ps:anomaly generate
     execute function ~/../set_bossbar with storage ps:anomaly generate:
         $bossbar set anomaly:boss/$(offset) players @a[predicate=anomaly:match_id]
-    execute as @a[distance=..4,scores={anomaly.travel=100..}] function ~/../teleport with storage ps:anomaly generate
 
 function ~/id:
     scoreboard players add .global anomaly.id 10000
     store result storage ps:anomaly generate.offset int 1 scoreboard players operation @s anomaly.id = .global anomaly.id
-    scoreboard players operation @a[distance=..4,scores={anomaly.travel=100..}] anomaly.id = @s anomaly.id
-    as @a[distance=..4,scores={anomaly.travel=100..}] function ~/../teleport with storage ps:anomaly generate
+    as @a[distance=..4,scores={anomaly.travel=100..}] function ~/../player_enter
     tag @s add anomaly.await_loaded
     function ~/../register_uuid
     scoreboard players reset @s anomaly.remove
@@ -23,7 +31,7 @@ function ~/await_loaded:
 
     tag @s remove anomaly.await_loaded
     tag @s add anomaly.active
-    store result storage ps:anomaly generate.dungeon int 1 random value 1..3 anomaly:dungeon
+    store result storage ps:anomaly generate.dungeon int 1 random value 1..2 anomaly:dungeon #! DUNGEON SELECT
     in anomaly:abyss function ~/../generate_dungeon with storage ps:anomaly generate:
         $execute positioned $(offset) 101 0 run function anomaly:dungeon/remove
         $execute positioned $(offset) 101 0 run function anomaly:dungeon/$(dungeon)

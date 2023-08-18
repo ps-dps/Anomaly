@@ -1,15 +1,19 @@
 
 function ~/spawn:
-    store result score @s anomaly.bossvar.0 random value 4..10
+    place template anomaly:boss/2
+    store result score @s anomaly.bossvar.0 random value 4..8
     store result storage ps:temp boss.id int 1 scoreboard players get @s anomaly.id
-    positioned ~24 ~9 ~24 summon item_display function ~/model with storage ps:temp boss: #! ADJUST POSITION TO REFLECT CORRECT POSITION IN ARENA
+    positioned ~23 ~9 ~23 summon item_display function ~/model with storage ps:temp boss:
         data modify entity @s teleport_duration set value 200
         tag @s add anomaly.boss
         tag @s add anomaly.radience
         $scoreboard players set #id anomaly $(id)
         scoreboard players operation @s anomaly.id = #id anomaly
         $scoreboard players set .$(id) anomaly.id 2
-        item replace entity @s container.0 with iron_chestplate
+        item replace entity @s container.0 with minecraft:warped_fungus_on_a_stick{CustomModelData:255903}
+        data modify entity @s transformation.translation set value [0d,4d,0d]
+        data modify entity @s transformation.scale set value [8d,8d,8d]
+        data modify entity @s billboard set value "vertical"
         summon giant ~ ~ ~ {
             Invulnerable: 1b,
             NoAI:1b,
@@ -46,11 +50,12 @@ function ~/spawn:
 function ~/tick:
     scoreboard players operation #id anomaly = @s anomaly.id
     as @e[type=item_display,tag=anomaly.radience,tag=!anomaly.radience.acid,predicate=./../match_id,limit=1] function ~/../tick_as_item_display
-    if entity @s[tag=anomaly.active] as @e[type=item_display,tag=anomaly.radience.acid,predicate=./../match_id,limit=1] at @s function ~/../tick_acid
-    as @e[type=marker,tag=anomaly.radience.beam,predicate=./../match_id] if score @s anomaly.time <= .gametime anomaly at @s function ~/../attack/beam3
-    store result score #temp anomaly scoreboard players add @s anomaly.time 1
-    if score @s anomaly.time matches 0.. scoreboard players operation #temp anomaly /= #20 anomaly
-    if score #temp anomaly = @s anomaly.bossvar.0 function ~/../attack
+    if entity @s[tag=anomaly.active] function ~/../tick_active:
+        as @e[type=item_display,tag=anomaly.radience.acid,predicate=./../match_id,limit=1] at @s function ~/../tick_acid
+        as @e[type=marker,tag=anomaly.radience.beam,predicate=./../match_id] if score @s anomaly.time <= .gametime anomaly at @s function ~/../attack/beam3
+        store result score #temp anomaly scoreboard players add @s anomaly.time 1
+        if score @s anomaly.time matches 0.. scoreboard players operation #temp anomaly /= #20 anomaly
+        if score #temp anomaly >= @s anomaly.bossvar.0 function ~/../attack
 
 function ~/tick_as_item_display:
     scoreboard players set #temp anomaly 0
@@ -96,7 +101,7 @@ function ~/deactivate:
     store result storage ps:temp boss.id int 1 scoreboard players get @s anomaly.id
     at @s as @e[type=item_display,tag=anomaly.boss,tag=anomaly.radience,tag=!anomaly.radience.acid,predicate=./../match_id] function ~/../deactivate_item_display:
         scoreboard players reset @s anomaly.boss.phase
-        tp ~24 ~9 ~24
+        tp ~23 ~9 ~23
     as @e[limit=1,type=giant,tag=anomaly.radience,predicate=./../match_id] function ~/../deactivate_giant with storage ps:temp boss:
         data modify entity @s Invulnerable set value 1b
         store result entity @s Health float 0.1 scoreboard players get @s anomaly.boss.max_health
@@ -104,22 +109,31 @@ function ~/deactivate:
     tp @e[tag=anomaly.boss.minion,predicate=./../match_id] ~ -100 ~
     kill @e[tag=anomaly.boss.minion,predicate=./../match_id]
     tp @e[type=item_display,tag=anomaly.radience.acid,predicate=./../match_id,limit=1] ~24 ~ ~24
+    scoreboard players reset @s anomaly.time
 
 
 function ~/attack:
-    store result score @s anomaly.bossvar.0 random value 4..10
+    store result score @s anomaly.bossvar.0 random value 4..8
     scoreboard players set @s anomaly.time -120
-    store result score #spawn anomaly if predicate ./../10percent
-    if score #spawn anomaly matches 1 function ./../mob/1/spawn
-    scoreboard players operation @e[tag=anomaly.setup] anomaly.id = @s anomaly.id
-    tag @e[tag=anomaly.setup] add anomaly.boss.minion
-    tag @e[tag=anomaly.setup] remove anomaly.setup
-    if predicate ./../10percent function ~/beam
+    store result score #spawn anomaly if predicate ~/../spawn_chance function ~/minion_spawn:
+        function ./../mob/1/spawn
+        function ./../mob/1/spawn
+        function ./../mob/1/spawn
+        scoreboard players operation #id anomaly = @s anomaly.id
+        as @e[tag=anomaly.setup,tag=anomaly.mob,distance=..100] function ~/../minion_setup:
+            scoreboard players operation @s anomaly.id = #id anomaly
+            tag @s add anomaly.boss.minion
+            tag @s remove anomaly.setup
+            store result storage ps:temp tp.x int 1 random value 0..47
+            store result storage ps:temp tp.y int 1 random value 0..47
+            store result storage ps:temp tp.z int 1 random value 0..47
+            execute function ~/../minion_tp with storage ps:temp tp:
+                $tp ~$(x).5 ~$(y) ~$(z).5
+    if predicate ~/../beam_chance function ~/beam
 
 
 function ~/attack/beam:
-    unless score @s anomaly.bossvar.0 = @s anomaly.bossvar.0 scoreboard players set @s anomaly.bossvar.0 3
-    scoreboard players operation #amt anomaly = @s anomaly.bossvar.0
+    scoreboard players set #amt anomaly 3
     scoreboard players operation #id anomaly = @s anomaly.id
     at @a[predicate=./../match_id] summon marker function ~/../beam2:
         scoreboard players operation @s anomaly.bossvar.0 = #amt anomaly
@@ -133,12 +147,13 @@ function ~/attack/beam:
         particle end_rod ~ ~ ~ 0 25 0 0 500
         playsound minecraft:block.beacon.activate hostile @a ~ ~ ~ 1 2
 function ~/attack/beam3:
-    particle dust 0.8 0 0.8 1.2 ~ ~ ~ 0.25 25 0.25 0 1500
+    particle dust 0.8 0 0.8 1.2 ~ ~ ~ 0.5 25 0.5 0 2000
     playsound minecraft:block.beacon.power_select hostile @a ~ ~ ~ 1 2
     scoreboard players operation #id anomaly = @s anomaly.id
-    positioned ~-0.5 ~-25 ~-0.5 as @a[dx=0,dy=49,dz=0] damage @s 5 arrow by @s from @e[type=giant,limit=1,tag=anomaly.boss,tag=anomaly.radience,predicate=./../match_id] #! ADD DAMAGE TYPE || CAN I USE FROM CAUSE FOR ATTACK DEATH MESSAGE
+    positioned ~-1 ~-25 ~-1 as @a[dx=1,dy=49,dz=1] damage @s 5 arrow by @s from @e[type=giant,limit=1,tag=anomaly.boss,tag=anomaly.radience,predicate=./../match_id] #! ADD DAMAGE TYPE FOR ALL DAMAGE COMMAND THINGS
     scoreboard players operation #amt anomaly = @s anomaly.bossvar.0
-    if score @s anomaly.bossvar.0 matches 1.. facing entity @p feet positioned ^ ^ ^2 summon marker function ~/../beam2
+    if score @s anomaly.bossvar.0 matches 1.. at @p summon marker function ~/../beam2
     kill @s
 
-predicate ~/10percent { "condition": "minecraft:random_chance", "chance": 0.1 }
+predicate ~/beam_chance { "condition": "minecraft:random_chance", "chance": 0.8 }
+predicate ~/spawn_chance { "condition": "minecraft:random_chance", "chance": 0.3 }
