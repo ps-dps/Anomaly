@@ -44,7 +44,7 @@ function ~/spawn:
             tag @s add anomaly.radience
             tag @s add anomaly.radience.acid
             scoreboard players operation @s anomaly.id = #id anomaly
-            item replace entity @s container.0 with magenta_stained_glass
+            item replace entity @s container.0 with minecraft:warped_fungus_on_a_stick{CustomModelData:255911}
 
 
 function ~/tick:
@@ -67,7 +67,7 @@ function ~/tick_acid:
     positioned ~-24 ~ ~-24 if entity @e[type=marker,tag=anomaly.bossarena,limit=1,distance=..47] tp ~24 ~0.003 ~24
     positioned ~-24 ~-2.5 ~-24 effect give @e[dx=47,dy=-47,dz=47] darkness 2 0 true
     scoreboard players operation #id anomaly = @s anomaly.id
-    positioned ~-24 ~-2.5 ~-24 as @e[dx=47,dy=-47,dz=47,tag=!anomaly.boss,tag=!anomaly.boss.minion] damage @s 1 arrow by @e[type=giant,limit=1,tag=anomaly.boss,tag=anomaly.radience,predicate=./../match_id]
+    positioned ~-24 ~-2.5 ~-24 as @e[dx=47,dy=-47,dz=47,tag=!anomaly.boss,tag=!anomaly.boss.minion] damage @s 1 anomaly:infection by @e[type=giant,limit=1,tag=anomaly.boss,tag=anomaly.radience,predicate=./../match_id]
 
 
 function ~/death:
@@ -150,7 +150,7 @@ function ~/attack/beam3:
     particle dust 0.8 0 0.8 2 ~ ~ ~ 0.5 25 0.5 0 2000
     playsound minecraft:block.beacon.power_select hostile @a ~ ~ ~ 1 2
     scoreboard players operation #id anomaly = @s anomaly.id
-    positioned ~-1 ~-25 ~-1 as @a[dx=1,dy=49,dz=1] damage @s 5 arrow by @s from @e[type=giant,limit=1,tag=anomaly.boss,tag=anomaly.radience,predicate=./../match_id] #! ADD DAMAGE TYPE FOR ALL DAMAGE COMMAND THINGS
+    positioned ~-1 ~-25 ~-1 as @a[dx=1,dy=49,dz=1] damage @s 5 anomaly:infection by @s from @e[type=giant,limit=1,tag=anomaly.boss,tag=anomaly.radience,predicate=./../match_id]
     scoreboard players operation #amt anomaly = @s anomaly.bossvar.0
     if score @s anomaly.bossvar.0 matches 1.. at @p summon marker function ~/../beam2
     kill @s

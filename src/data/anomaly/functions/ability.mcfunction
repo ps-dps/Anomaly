@@ -39,7 +39,7 @@ function ~/4/hit:
     particle end_rod ~ ~ ~ 0 2 0 0 50
     particle dust 0.8 0 0.8 2 ~ ~ ~ 0.2 2 0.2 0 200
     playsound minecraft:block.beacon.power_select hostile @a ~ ~ ~ 1 2
-    positioned ~-0.5 ~-4 ~-0.5 as @e[tag=!anomaly.temp.damage,dx=0,dy=7,dz=0] damage @s 4 arrow by @a[tag=anomaly.temp.damage,limit=1]
+    positioned ~-0.5 ~-4 ~-0.5 as @e[tag=!anomaly.temp.damage,dx=0,dy=7,dz=0] damage @s 4 anomaly:infection by @a[tag=anomaly.temp.damage,limit=1]
 
 function ~/5:
 #> eye of the anomaly (tp home)

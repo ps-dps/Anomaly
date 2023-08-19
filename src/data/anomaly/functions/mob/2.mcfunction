@@ -12,7 +12,7 @@ function ~/spawn:
 
 function ~/tick:
     tag @s add anomaly.temp.damage
-    positioned ~-1.5 ~-0.5 ~-1.5 as @e[dx=2,dy=0,dz=2] damage @s 3 arrow by @e[type=item_display,tag=anomaly.temp.damage,limit=1,distance=..4]
+    positioned ~-1.5 ~-0.5 ~-1.5 as @e[dx=2,dy=0,dz=2] damage @s 3 anomaly:infection by @e[type=item_display,tag=anomaly.temp.damage,limit=1,distance=..4]
     tag @s remove anomaly.temp.damage
     scoreboard players add @s anomaly.time 1
     if score @s anomaly.time matches 600.. kill @s

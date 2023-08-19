@@ -32,7 +32,7 @@ function ~/await_loaded:
 
     tag @s remove anomaly.await_loaded
     tag @s add anomaly.active
-    store result storage ps:anomaly generate.dungeon int 1 random value 1..2 anomaly:dungeon #! DUNGEON SELECT
+    store result storage ps:anomaly generate.dungeon int 1 random value 1..2 anomaly:dungeon
     in anomaly:abyss function ~/../generate_dungeon with storage ps:anomaly generate:
         $execute positioned $(offset) 101 0 run function anomaly:dungeon/remove
         $execute positioned $(offset) 101 0 run function anomaly:dungeon/$(dungeon)

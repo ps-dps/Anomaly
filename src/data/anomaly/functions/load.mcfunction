@@ -125,3 +125,10 @@ predicate ./match_id { "condition": "minecraft:entity_scores", "entity": "this",
             "score": "anomaly" }}
     }}
 
+damage_type ./infection {
+    "message_id": "anomaly.infection",
+    "exhaustion": 0,
+    "scaling": "never"
+    }
+
+append damage_type_tag minecraft:no_knockback {"values":["anomaly:infection"]}

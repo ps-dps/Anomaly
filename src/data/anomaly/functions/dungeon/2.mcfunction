@@ -1,7 +1,7 @@
 #> CITY SCAPE ISLANDS
 
 execute if loaded ~ ~ ~
-say MADE CITTY
+say dfsf
 
 scoreboard players operation #id anomaly = @s anomaly.id
 

@@ -1,7 +1,7 @@
 #> FLOATING ISLANDS
 
 if loaded ~ ~ ~
-say MADE FLOTTING ISLANGS
+say asdfkjik
 
 scoreboard players operation #id anomaly = @s anomaly.id
 
