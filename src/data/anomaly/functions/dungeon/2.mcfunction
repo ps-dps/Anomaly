@@ -19,6 +19,8 @@ positioned ~-42 ~-1 ~-57 function ~/place_main:
     positioned ~47 ~47 ~47 place template anomaly:dungeon/2/10
     positioned ~47 ~47 ~95 place template anomaly:dungeon/2/11
 
+as @e[type=marker,tag=anomaly.mob.spawn] at @s function ./../spawn_random_mob
+
 store result storage ps:temp boss.id int 1 random value 1..2
 positioned ~-23 ~-5 ~-104 summon marker function ~/place_boss with storage ps:temp boss:
     tag @s add anomaly.bossarena

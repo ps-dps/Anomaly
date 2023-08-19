@@ -28,7 +28,9 @@ def beet_default(ctx: Context):
         if not ctx.assets.models.get(name):
             ctx.assets.models[name] = Model({
 	            "parent": "minecraft:item/generated",
-	            "textures": { "layer0": name }})
+	            "textures": { "layer0": name }}) if not "armor" in name else Model({
+	            "parent": "minecraft:item/generated",
+	            "textures": { "layer0": name, "layer1": name }})
 
         new_model = model.data.copy()
         new_model['overrides'] = [{"predicate": { "custom_model_data": int(cmd) }, "model": name}]

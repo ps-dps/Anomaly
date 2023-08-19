@@ -2,6 +2,7 @@
 function ~/just_tp:
     store result storage ps:anomaly generate.offset int 1 scoreboard players operation #id anomaly = @s anomaly.id
     as @a[distance=..4,scores={anomaly.travel=100..}] function ~/../player_enter:
+        if predicate ./destroy_elytra function ./destroy_elytra
         data remove storage ps:edb entity
         function ./edb/load with entity @s
         store result storage ps:edb entity.anomaly.return_x int 1 data get entity @s Pos[0]

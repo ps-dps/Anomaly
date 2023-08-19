@@ -14,9 +14,11 @@ if predicate ~/mainhand run function ~/mainhand:
 
     store result score #cooldown anomaly.ability data get entity @s SelectedItem.tag.anomaly.cooldown
     store result score .gametime anomaly time query gametime
+    if score #cooldown anomaly.ability > .gametime anomaly title @s actionbar {"text":"This ability is on cooldown","color":"red"}
     if score #cooldown anomaly.ability > .gametime anomaly return 0
     
     function ./utils/run_function with storage ps:wfoas call
+    if entity @s[tag=anomaly.passive.9] scoreboard players operation .cooldown anomaly.ability /= #2 anomaly
     store result storage ps:wfoas item.cooldown int 1 scoreboard players operation .cooldown anomaly.ability += .gametime anomaly
     item modify entity @s weapon.mainhand ~/../cooldown
 
@@ -29,9 +31,11 @@ if score #executed anomaly.ability matches 0 if predicate ~/offhand run function
 
     store result score #cooldown anomaly.ability data get entity @s Inventory[{Slot:-106b}].tag.anomaly.cooldown
     store result score .gametime anomaly time query gametime
+    if score #cooldown anomaly.ability > .gametime anomaly title @s actionbar {"text":"This ability is on cooldown","color":"red"}
     if score #cooldown anomaly.ability > .gametime anomaly return 0
     
     function ./utils/run_function with storage ps:wfoas call
+    if entity @s[tag=anomaly.passive.9] scoreboard players operation .cooldown anomaly.ability /= #2 anomaly
     store result storage ps:wfoas item.cooldown int 1 scoreboard players operation .cooldown anomaly.ability += .gametime anomaly
     item modify entity @s weapon.offhand ~/../cooldown
 

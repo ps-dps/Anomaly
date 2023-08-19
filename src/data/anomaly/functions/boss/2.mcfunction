@@ -147,7 +147,7 @@ function ~/attack/beam:
         particle end_rod ~ ~ ~ 0 25 0 0 500
         playsound minecraft:block.beacon.activate hostile @a ~ ~ ~ 1 2
 function ~/attack/beam3:
-    particle dust 0.8 0 0.8 1.2 ~ ~ ~ 0.5 25 0.5 0 2000
+    particle dust 0.8 0 0.8 2 ~ ~ ~ 0.5 25 0.5 0 2000
     playsound minecraft:block.beacon.power_select hostile @a ~ ~ ~ 1 2
     scoreboard players operation #id anomaly = @s anomaly.id
     positioned ~-1 ~-25 ~-1 as @a[dx=1,dy=49,dz=1] damage @s 5 arrow by @s from @e[type=giant,limit=1,tag=anomaly.boss,tag=anomaly.radience,predicate=./../match_id] #! ADD DAMAGE TYPE FOR ALL DAMAGE COMMAND THINGS

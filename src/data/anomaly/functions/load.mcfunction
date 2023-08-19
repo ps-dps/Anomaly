@@ -27,9 +27,11 @@ scoreboard objectives add anomaly.mob dummy
 scoreboard objectives add anomaly.raycast dummy
 
 scoreboard objectives add anomaly.ability minecraft.used:minecraft.warped_fungus_on_a_stick
+scoreboard objectives add anomaly.health health
 
 scoreboard players set #100 anomaly 100
 scoreboard players set #20 anomaly 20
+scoreboard players set #2 anomaly 2
 
 data modify storage ps:anomaly spawn_range set value {min:3600,max:24000}
 unless data storage ps:anomaly anomalies data modify storage ps:anomaly anomalies set value []
@@ -41,6 +43,9 @@ execute function ./tick:
 
     #> TICKING FUNCTION
     store result score .gametime anomaly time query gametime
+
+    as @e[tag=anomaly.ability.activate] if score @s anomaly.time <= .gametime anomaly function ~/activate_ability:
+        if score @s anomaly.id matches 3 function ./ability/3/activate
 
     as @e[type=item_display,tag=anomaly.anomaly] at @s function ./tick_as_anomaly:
         particle portal ~ ~ ~ 0 0 0 3 1
@@ -68,6 +73,8 @@ execute function ./tick:
         if entity @s[tag=anomaly.passive.tick.feet] store result storage ps:temp passive.id int 1 scoreboard players get @s anomaly.passive.feet
         if entity @s[tag=anomaly.passive.tick.feet] function ./tick_passive with storage ps:temp passive:
             $function anomaly:passive/$(id)/tick
+
+        if entity @s[tag=anomaly.ability.ekko] particle minecraft:dripping_obsidian_tear ~ ~ ~ 0 0 0 0 1
 
         if score @s anomaly.ability matches 1.. function ./wfoas
 

@@ -28,7 +28,7 @@ function ~/spawn2:
         on passengers attribute @s minecraft:generic.max_health base set 300
         on passengers store result score @s anomaly.boss.health store result score @s anomaly.boss.max_health attribute @s minecraft:generic.max_health get 10
         on passengers store result entity @s Health float 0.1 scoreboard players get @s anomaly.boss.max_health
-        $bossbar add anomaly:boss/$(id) {"text":"Nexus of Infection","color":"light_purple"}
+        $bossbar add anomaly:boss/$(id) {"text":"Sludge","color":"light_purple"}
         $execute on passengers store result bossbar anomaly:boss/$(id) max run scoreboard players get @s anomaly.boss.max_health
         $execute on passengers store result bossbar anomaly:boss/$(id) value run scoreboard players get @s anomaly.boss.health
         $bossbar set anomaly:boss/$(id) color red
@@ -74,15 +74,15 @@ function ~/summon_spread_minion:
     if score #mob anomaly matches 3 run summon enderman ~ ~ ~ {Tags:["anomaly.setup"]}
     if score #mob anomaly matches 4 run summon endermite ~ ~ ~ {Tags:["anomaly.setup"]}
     if score #mob anomaly matches 5..8 run summon zombie ~ ~ ~ {Tags:["anomaly.setup"], ArmorDropChances:[0f,0f,0f,0f], ArmorItems:[
-        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:15204572}}},
-        {id:"minecraft:leather_leggings",Count:1b,tag:{display:{color:15204572}}},
-        {id:"minecraft:leather_chestplate",Count:1b,tag:{display:{color:15204572}}},
-        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:15204572}}}]}
+        {id:"minecraft:leather_boots",Count:1b,tag:{display:{color:1}}},
+        {id:"minecraft:leather_leggings",Count:1b,tag:{display:{color:1}}},
+        {id:"minecraft:leather_chestplate",Count:1b,tag:{display:{color:1}}},
+        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:1}}}]}
     if score #mob anomaly matches 9..10 run summon skeleton ~ ~ ~ {Tags:["anomaly.setup"], HandItems:[{id:"minecraft:bow",Count:1b},{}], ArmorDropChances:[0f,0f,0f,0f], ArmorItems:[
-        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:15204572}}},
-        {id:"minecraft:leather_leggings",Count:1b,tag:{display:{color:15204572}}},
-        {id:"minecraft:leather_chestplate",Count:1b,tag:{display:{color:15204572}}},
-        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:15204572}}}]}
+        {id:"minecraft:leather_boots",Count:1b,tag:{display:{color:1}}},
+        {id:"minecraft:leather_leggings",Count:1b,tag:{display:{color:1}}},
+        {id:"minecraft:leather_chestplate",Count:1b,tag:{display:{color:1}}},
+        {id:"minecraft:leather_helmet",Count:1b,tag:{display:{color:1}}}]}
 
     as @e[tag=anomaly.setup] function ~/../summon_spread_minion_setup:
         tag @s add anomaly.boss.minion
